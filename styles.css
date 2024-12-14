@@ -1,0 +1,695 @@
+/* Reset Dasar */
+* {
+    box-sizing: border-box; /* Memastikan padding dan border termasuk dalam total lebar dan tinggi elemen */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Menggunakan font modern dan bersih */
+    background: linear-gradient(135deg, #f7f7f7, #e2e2e2); /* Gradient latar belakang body */
+    line-height: 1.6; /* Meningkatkan keterbacaan */
+    opacity: 0; /* Mulai dengan opacity 0 untuk efek fade-in */
+    animation: fadeIn 1s forwards; /* Animasi fade-in untuk body */
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1; /* Opacity akhir */
+    }
+}
+
+.container {
+    max-width: 900px; /* Lebar maksimum untuk layar besar */
+    margin: 0 auto; /* Pusatkan container */
+    padding: 20px; /* Padding untuk konten di dalam */
+    background: #fff; /* Latar belakang putih untuk konten */
+    border-radius: 8px; /* Sudut membulat */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan halus untuk kedalaman */
+    transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease; /* Efek transisi tambahan */
+    opacity: 0; /* Mulai dengan opacity 0 untuk efek fade-in */
+    animation: slideIn 0.5s forwards; /* Animasi slide-in untuk container */
+    animation-delay: 0.2s; /* Penundaan untuk kemunculan container */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px); /* Mulai sedikit lebih rendah */
+        opacity: 0; /* Mulai dengan opacity 0 */
+    }
+    to {
+        transform: translateY(0); /* Berakhir di posisi asli */
+        opacity: 1; /* Opacity akhir */
+    }
+}
+
+.container:hover {
+    background-color: #f1f1f1; /* Warna latar belakang lebih terang saat hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Bayangan lebih dalam saat hover */
+    transform: scale(1.02); /* Efek skala saat hover */
+}
+
+header {
+    background: linear-gradient(90deg, #4a90e2 0%, #357abd 100%); /* Latar belakang gradasi */
+    color: white; /* Warna teks putih */
+    padding: 20px 0; /* Padding untuk header */
+    text-align: center; /* Teks rata tengah */
+    border-radius: 8px; /* Sudut membulat */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    transition: transform 0.3s ease, background-position 0.3s ease, text-shadow 0.3s ease, filter 0.3s ease; /* Transisi ditambahkan untuk header */
+    background-size: 200% 200%; /* Gradient lebih besar dari area tampilan */
+    animation: gradientShift 5s linear infinite, parallax 10s linear infinite; /* Animasi gradient bergerak dan efek parallax */
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+@keyframes parallax {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
+header:hover {
+    transform: scale(1.02); /* Efek skala sedikit saat hover */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Efek cahaya pada teks header saat hover */
+    filter: blur(2px); /* Efek blur pada header saat hover */
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.2em; /* Ukuran font ditingkatkan untuk visibilitas lebih baik */
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Efek bayangan teks ditambahkan */
+    transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease; /* Transisi untuk perubahan warna dan bayangan teks */
+}
+
+h1:hover {
+    color: #d4e6f7; /* Ubah warna saat hover untuk header */
+    text-shadow: 0 1px 10px rgba(255, 255, 255, 0.6); /* Tambahkan efek cahaya pada hover */
+    transform: scale(1.05); /* Sedikit skala saat hover */
+}
+
+.file-section {
+    margin: 20px 0; /* Spasi di atas dan bawah */
+    padding: 20px; /* Padding untuk bagian */
+    background: #fff; /* Latar belakang putih */
+    border-radius: 8px; /* Sudut membulat */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease; /* Transisi ditambahkan */
+}
+
+.file-section:hover {
+    background-color: #f7f7f7; /* Efek hover */
+    transform: scale(1.02); /* Efek skala sedikit saat hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Bayangan lebih dalam saat hover */
+    filter: brightness(1.05); /* Efek kecerahan */
+}
+
+input[type="file"],
+input[type="text"],
+input[type="number"] {
+    width: calc(100% - 22px); /* Perhitungan lebar responsif */
+    padding: 10px; /* Padding untuk input */
+    margin: 10px 0; /* Margin untuk spasi */
+    border: 1px solid #ddd; /* Warna border */
+    border-radius: 4px; /* Sudut membulat */
+    font-size: 1em; /* Ukuran font */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease; /* Transisi untuk warna border, bayangan, skala, dan latar belakang */
+    background: linear-gradient(white, #f1f1f1); /* Efek gradient latar belakang */
+}
+
+input[type="file"]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: #4a90e2; /* Efek fokus */
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Efek cahaya pada fokus */
+    transform: scale(1.01); /* Sedikit skala input saat fokus */
+    outline: none; /* Hapus outline default */
+    background: white; /* Latar belakang putih saat fokus */
+}
+
+input[type="text"].error {
+    border-color: #e94e77; /* Warna border kesalahan */
+    animation: shake 0.5s; /* Animasi goyangan saat kesalahan */
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 0); }
+    25% { transform: translate(-1px, 0); }
+    50% { transform: translate(1px, 0); }
+    75% { transform: translate(-1px, 0); }
+    100% { transform: translate(1px, 0); }
+}
+
+button {
+    padding: 10px 20px; /* Padding untuk tombol */
+    background-color: #4a90e2; /* Warna tombol */
+    color: white; /* Warna teks */
+    border: none; /* Tanpa border */
+    border-radius: 4px; /* Sudut membulat */
+    cursor: pointer; /* Kursor pointer saat hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    font-size: 1em; /* Ukuran font tombol */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, color 0.2s ease; /* Transisi untuk latar belakang, skala, bayangan, filter, dan warna */
+    position: relative; /* Posisi relatif untuk efek ripple */
+    animation: bounce 0.5s forwards; /* Animasi bounce untuk tombol */
+    animation-delay: 0.5s; /* Penundaan untuk kemunculan tombol */
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+button:hover {
+    background-color: #357abd; /* Warna saat hover */
+    transform: scale(1.05); /* Sedikit perbesar ukuran saat hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan saat hover */
+    filter: brightness(1.1); /* Efek kecerahan */
+    animation: pulse 1s infinite; /* Efek pulse berdenyut pada hover */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+button:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Efek saat aktif */
+    transform: scale(0.98); /* Sedikit perkecil ukuran saat aktif */
+    animation: rotate 0.3s; /* Efek rotasi saat aktif */
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(10deg);
+    }
+}
+
+/* Efek Ripple untuk Tombol */
+button::after {
+    content: ''; /* Konten kosong untuk efek ripple */
+    position: absolute; /* Posisi absolut */
+    top: 50%; /* Posisi vertikal tengah */
+    left: 50%; /* Posisi horizontal tengah */
+    width: 300%; /* Lebar efek ripple */
+    height: 300%; /* Tinggi efek ripple */
+    background: rgba(255, 255, 255, 0.3); /* Warna efek ripple */
+    border-radius: 50%; /* Bentuk bulat */
+    transform: scale(0); /* Skala awal ripple */
+    transition: transform 0.5s, opacity 0.5s; /* Transisi untuk efek ripple */
+    pointer-events: none; /* Tidak dapat diklik */
+}
+
+button:focus::after,
+button:active::after {
+    transform: scale(1); /* Skala ripple saat aktif */
+    opacity: 0; /* Hilangkan opacity setelah efek ripple selesai */
+}
+
+/* Efek Blur pada .file-item */
+.file-item {
+    padding: 10px; /* Padding untuk setiap item file */
+    background: #eaf2f8; /* Latar belakang terang untuk item file */
+    border: 1px solid #cfd8dc; /* Warna border */
+    border-radius: 4px; /* Sudut membulat */
+    margin-bottom: 10px; /* Spasi antar item */
+    display: flex; /* Layout flexbox */
+    justify-content: space-between; /* Spasi antar elemen */
+    align-items: center; /* Penyelarasan tengah */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, border 0.3s ease; /* Transisi untuk latar belakang, skala, bayangan, filter, dan border */
+    opacity: 0; /* Mulai dengan opacity 0 untuk efek fade-in */
+    animation: slideIn 0.5s forwards; /* Animasi slide-in untuk item file */
+}
+
+.file-item:hover {
+    background-color: #d7e4f4; /* Efek hover untuk item file */
+    transform: translateY(-2px); /* Gerakan ke atas sedikit saat hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan saat hover */
+    filter: brightness(1.05) blur(2px); /* Efek kecerahan dan blur saat hover */
+    border: 1px solid #4a90e2; /* Warna border saat hover */
+}
+
+.file-item::before {
+    content: '📁'; /* Ikon file sebelum teks */
+    margin-right: 10px; /* Spasi di kanan ikon */
+    font-size: 1.5em; /* Ukuran ikon */
+    transition: color 0.3s ease; /* Transisi untuk perubahan warna ikon */
+}
+
+.file-item:hover::before {
+    color: #357abd; /* Ubah warna ikon saat hover */
+}
+
+/* Efek Skew pada File Section */
+.file-section {
+    margin: 20px 0; /* Spasi di atas dan bawah */
+    padding: 20px; /* Padding untuk bagian */
+    background: #fff; /* Latar belakang putih */
+    border-radius: 8px; /* Sudut membulat */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Transisi ditambahkan */
+    transform: skewY(-1deg); /* Efek skew pada bagian file */
+}
+
+.file-section:hover {
+    background-color: #f7f7f7; /* Efek hover */
+    transform: skewY(0deg) scale(1.02); /* Efek skew dan skala sedikit saat hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Bayangan lebih dalam saat hover */
+}
+
+/* Efek Parallax pada Background */
+body {
+    background: url('path-to-background-image.jpg') no-repeat center center fixed; /* Ganti dengan path gambar background Anda */
+    background-size: cover; /* Ukuran background cover untuk menutupi area tampilan */
+}
+
+/* Efek Blur pada Header */
+header {
+    backdrop-filter: blur(5px); /* Efek blur pada background header */
+}
+
+/* Efek Pulse pada Tombol */
+button {
+    padding: 10px 20px; /* Padding untuk tombol */
+    background-color: #4a90e2; /* Warna tombol */
+    color: white; /* Warna teks */
+    border: none; /* Tanpa border */
+    border-radius: 4px; /* Sudut membulat */
+    cursor: pointer; /* Kursor pointer saat hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    font-size: 1em; /* Ukuran font tombol */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, color 0.2s ease; /* Transisi untuk latar belakang, skala, bayangan, filter, dan warna */
+    position: relative; /* Posisi relatif untuk efek ripple */
+    animation: bounce 0.5s forwards; /* Animasi bounce untuk tombol */
+    animation-delay: 0.5s; /* Penundaan untuk kemunculan tombol */
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+button:hover {
+    background-color: #357abd; /* Warna saat hover */
+    transform: scale(1.05); /* Sedikit perbesar ukuran saat hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan saat hover */
+    filter: brightness(1.1); /* Efek kecerahan */
+    animation: pulse 1s infinite; /* Efek pulse berdenyut pada hover */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+button:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Efek saat aktif */
+    transform: scale(0.98); /* Sedikit perkecil ukuran saat aktif */
+    animation: rotate 0.3s; /* Efek rotasi saat aktif */
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(10deg);
+    }
+}
+
+/* Efek Ripple untuk Tombol */
+button::after {
+    content: ''; /* Konten kosong untuk efek ripple */
+    position: absolute; /* Posisi absolut */
+    top: 50%; /* Posisi vertikal tengah */
+    left: 50%; /* Posisi horizontal tengah */
+    width: 300%; /* Lebar efek ripple */
+    height: 300%; /* Tinggi efek ripple */
+    background: rgba(255, 255, 255, 0.3); /* Warna efek ripple */
+    border-radius: 50%; /* Bentuk bulat */
+    transform: scale(0); /* Skala awal ripple */
+    transition: transform 0.5s, opacity 0.5s; /* Transisi untuk efek ripple */
+    pointer-events: none; /* Tidak dapat diklik */
+}
+
+button:focus::after,
+button:active::after {
+    transform: scale(1); /* Skala ripple saat aktif */
+    opacity: 0; /* Hilangkan opacity setelah efek ripple selesai */
+}
+
+/* Efek Neon pada Header */
+header {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 204, 255, 0.8);
+}
+
+/* Efek Hover pada Header */
+header:hover {
+    background: linear-gradient(90deg, #357abd 0%, #4a90e2 100%); /* Gradasi latar belakang saat hover */
+    transition: background 0.3s ease;
+    filter: brightness(1.1); /* Efek kecerahan saat hover */
+}
+
+/* Efek Glow pada Input Fields */
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.6); /* Efek glow saat fokus */
+    transition: box-shadow 0.3s ease;
+}
+
+/* Efek Ripple pada File Items */
+.file-item {
+    position: relative; /* Posisi relatif untuk efek ripple */
+}
+
+.file-item::after {
+    content: ''; /* Konten kosong untuk efek ripple */
+    position: absolute; /* Posisi absolut */
+    top: 50%; /* Posisi vertikal tengah */
+    left: 50%; /* Posisi horizontal tengah */
+    width: 200%; /* Lebar efek ripple */
+    height: 200%; /* Tinggi efek ripple */
+    background: rgba(0, 0, 0, 0.1); /* Warna efek ripple */
+    border-radius: 50%; /* Bentuk bulat */
+    transform: scale(0); /* Skala awal ripple */
+    transition: transform 0.6s, opacity 0.6s; /* Transisi untuk efek ripple */
+    pointer-events: none; /* Tidak dapat diklik */
+}
+
+.file-item:hover::after {
+    transform: scale(1); /* Skala ripple saat hover */
+    opacity: 0; /* Hilangkan opacity setelah efek ripple selesai */
+}
+
+/* Efek Gradient pada Tombol */
+button {
+    background: linear-gradient(45deg, #4a90e2, #357abd); /* Gradient latar belakang tombol */
+    background-size: 200% 200%; /* Ukuran latar belakang gradient */
+    transition: background-position 0.5s ease; /* Transisi untuk latar belakang gradient */
+}
+
+button:hover {
+    background-position: 100% 100%; /* Ubah posisi latar belakang saat hover */
+}
+
+/* Efek Flip pada File Items */
+.file-item:hover {
+    transform: rotateY(10deg); /* Efek flip 3D saat hover */
+    transition: transform 0.5s ease; /* Transisi untuk efek flip */
+}
+
+/* Efek Shimmer pada Tombol */
+button::before {
+    content: ''; /* Konten kosong untuk efek shimmer */
+    position: absolute; /* Posisi absolut */
+    top: 0; /* Posisi atas */
+    left: -100%; /* Posisi kiri */
+    width: 100%; /* Lebar efek shimmer */
+    height: 100%; /* Tinggi efek shimmer */
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%); /* Gradient untuk efek shimmer */
+    transform: skewX(-30deg); /* Skew efek shimmer */
+    transition: transform 0.8s ease; /* Transisi untuk efek shimmer */
+}
+
+button:hover::before {
+    transform: translateX(200%) skewX(-30deg); /* Gerakan shimmer saat hover */
+}
+
+/* Efek Zoom pada File Items */
+.file-item:hover {
+    transform: scale(1.05); /* Zoom sedikit saat hover */
+    transition: transform 0.3s ease; /* Transisi untuk zoom */
+}
+
+/* Efek Tilt pada Header */
+header {
+    perspective: 1000px; /* Sudut pandang 3D */
+}
+
+header:hover {
+    transform: rotateX(5deg) rotateY(5deg); /* Tilt saat hover */
+    transition: transform 0.3s ease; /* Transisi untuk tilt */
+}
+
+/* Efek Shadow pada Header */
+header {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Bayangan lebih dalam */
+    transition: box-shadow 0.3s ease; /* Transisi untuk bayangan */
+}
+
+header:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Bayangan lebih dalam saat hover */
+}
+
+/* Efek Wobble pada Button */
+button:focus {
+    animation: wobble 1s; /* Animasi wobble saat fokus */
+}
+
+@keyframes wobble {
+    0% { transform: rotate(0deg); }
+    15% { transform: rotate(5deg); }
+    30% { transform: rotate(-5deg); }
+    45% { transform: rotate(3deg); }
+    60% { transform: rotate(-3deg); }
+    75% { transform: rotate(1deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Efek 3D pada Header */
+header {
+    transform: rotateX(0deg) rotateY(0deg); /* Rotasi awal */
+    transition: transform 0.6s ease; /* Transisi untuk rotasi */
+}
+
+header:hover {
+    transform: rotateX(10deg) rotateY(10deg); /* Rotasi 3D saat hover */
+}
+
+/* Efek Hover Bergelombang pada Tombol */
+button {
+    background: linear-gradient(45deg, #4a90e2, #357abd);
+    background-size: 200% 200%;
+    transition: background-position 0.5s, transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden; /* Menyembunyikan efek luar area tombol */
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.6s ease;
+}
+
+button:hover::before {
+    transform: scale(1);
+}
+
+/* Efek Skew pada File Items */
+.file-item {
+    transform: skew(-5deg);
+    transition: transform 0.3s;
+}
+
+.file-item:hover {
+    transform: skew(0deg) scale(1.05); /* Reset skew dan zoom saat hover */
+}
+
+/* Efek Zoom-In pada Input Fields */
+input[type="text"]:focus,
+input[type="number"]:focus {
+    transform: scale(1.02); /* Zoom-in saat fokus */
+}
+
+/* Efek Pudar pada Bagian File yang Diupload */
+#uploaded-files {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+#uploaded-files.show {
+    opacity: 1;
+}
+
+/* Efek Gelombang pada Tombol */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.6s;
+}
+
+button:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Efek Glitch pada Header */
+header {
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.2);
+    clip: rect(0, 0, 0, 0);
+    animation: glitch 1s infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes glitch {
+    0% {
+        clip: rect(0, 0, 0, 0);
+        transform: translate(-10px, -10px);
+    }
+    50% {
+        clip: rect(0, 0, 0, 0);
+        transform: translate(10px, 10px);
+    }
+    100% {
+        clip: rect(0, 0, 0, 0);
+        transform: translate(-10px, -10px);
+    }
+}
+
+/* Efek Transisi Halus pada Item File */
+.file-item {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.file-item:hover {
+    transform: scale(1.03);
+    background-color: #d7e4f4;
+}
+
+/* Efek Parallax pada Latar Belakang */
+body {
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    perspective: 1px; /* Menambahkan efek parallax pada latar belakang */
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9); /* Latar belakang semi-transparan untuk konten */
+}
+
+/* Efek Flicker pada Teks Header */
+h1 {
+    position: relative;
+    animation: flicker 1.5s infinite;
+}
+
+@keyframes flicker {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Efek Flash pada Tombol */
+button {
+    position: relative;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    transition: transform 0.4s ease;
+}
+
+button:hover::after {
+    transform: scale(1);
+}
+
+/* Efek Kenyut pada File Items */
+.file-item {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
