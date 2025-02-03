@@ -181,28 +181,29 @@
 
                     const baseFileName = vcfFileName ? vcfFileName : fileName;
 
+                    
                     // Format gabungan nama file dan nomor urut
                     let formattedFileName;
                     if (fileNameFormat === "no-space") {
-                        formattedFileName = `${baseFileName} ${fileNumber}`; // Ada spasi antara nama dan nomor
+                        formattedFileName = `${baseFileName.trim()}${fileNumber}`; // Gabungkan langsung tanpa spasi
                     } else if (fileNameFormat === "with-space") {
-                        formattedFileName = `${baseFileName} ${fileNumber}`;
+                        formattedFileName = `${baseFileName.trim()} ${fileNumber}`; // Pakai spasi
                     } else {
-                        formattedFileName = `${baseFileName}-${fileNumber}`;
+                        formattedFileName = `${baseFileName.trim()}-${fileNumber}`; // Pakai "-"
                     }
-
-                    // Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
+                    
+                    // Tentukan posisi nomor dalam nama file
                     link.download = numberPosition === 'before'
                         ? `${fileNumber} ${formattedFileName}.vcf`
-                        : `${formattedFileName}.vcf`; // Hapus `_23` yang tidak perlu
-
+                        : `${formattedFileName}.vcf`;
+                    
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                     URL.revokeObjectURL(vcfUrl);
 
                     console.log(`Downloaded file: ${link.download}`);
-
+                    
                     fileNumber++;
 
                 }
