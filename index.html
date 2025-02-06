@@ -270,8 +270,6 @@ function readFileAsync(file) {
     });
 }
 
-
-
         // Fungsi untuk mengonversi VCF ke TXT
         let uploadedFiles = []; // Menyimpan file yang diunggah
 
@@ -294,12 +292,8 @@ const readFile = (file) => {
 const processFileContent = (fileContent) => {
     const vcardArray = fileContent.split(/END:VCARD\s*/).filter(vcard => vcard.trim() !== '');
     const contacts = vcardArray.map(vcard => {
-        let telMatch = vcard.match(/TEL:(.+)/); // Format umum "TEL:"
-        if (telMatch) {
-            return telMatch[1].trim().replace(/\s+/g, '');
-        }
-
-        telMatch = vcard.match(/item\d+\.TEL:(.+)/); // Format alternatif "item.TEL"
+        // Mencocokkan berbagai format nomor telepon
+        let telMatch = vcard.match(/TEL[^:]*:(.+)/i); // Format umum "TEL:" atau "TEL;TYPE=CELL:"
         if (telMatch) {
             return telMatch[1].trim().replace(/\s+/g, '');
         }
@@ -402,7 +396,7 @@ document.getElementById('vcf-files').addEventListener('change', (event) => {
     }
 });
 
-
+        
         // Fungsi untuk memecah file VCF
         function splitVcfFile() {
     const fileInput = document.getElementById('vcf-file');
