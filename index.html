@@ -33,6 +33,12 @@
         <option value="with-hyphen">Instagram Q-23</option>
     </select>
     
+    <select id="number-format">
+        <option value="three-digit">Instagram Q001</option>
+        <option value="two-digit">Instagram Q01</option>
+        <option value="one-digit">Instagram Q1</option>
+    </select>
+
     <button onclick="convertTxtToVcf()">Konversi</button>
     <p id="file-info"></p>
 </section>
@@ -103,6 +109,7 @@
     const numberPosition = document.getElementById('number-position').value;
     const countryCode = document.getElementById('country-code').value.trim();
     const fileNameFormat = document.getElementById('file-name-format').value;
+    const numberFormat = document.getElementById('number-format').value; // Ambil format nomor belakang
     const fileInfo = document.getElementById('file-info');
 
     if (fileInput.files.length === 0) {
@@ -181,31 +188,45 @@
 
                     const baseFileName = vcfFileName ? vcfFileName : fileName;
 
-                    
+                    // Format nomor belakang berdasarkan pilihan
+                    let formattedNumber;
+                    switch (numberFormat) {
+                        case 'three-digit':
+                            formattedNumber = fileNumber.toString().padStart(3, '0'); // 001, 002, dst.
+                            break;
+                        case 'two-digit':
+                            formattedNumber = fileNumber.toString().padStart(2, '0'); // 01, 02, dst.
+                            break;
+                        case 'one-digit':
+                            formattedNumber = fileNumber.toString(); // 1, 2, dst.
+                            break;
+                        default:
+                            formattedNumber = fileNumber.toString().padStart(3, '0'); // Default: tiga digit
+                    }
+
                     // Format gabungan nama file dan nomor urut
                     let formattedFileName;
                     if (fileNameFormat === "no-space") {
-                        formattedFileName = `${baseFileName.trim()}${fileNumber}`; // Gabungkan langsung tanpa spasi
+                        formattedFileName = `${baseFileName} Q${formattedNumber}`; // Contoh: InstagramQ001
                     } else if (fileNameFormat === "with-space") {
-                        formattedFileName = `${baseFileName.trim()} ${fileNumber}`; // Pakai spasi
+                        formattedFileName = `${baseFileName} Q ${formattedNumber}`; // Contoh: Instagram Q 001
                     } else {
-                        formattedFileName = `${baseFileName.trim()}-${fileNumber}`; // Pakai "-"
+                        formattedFileName = `${baseFileName}-Q-${formattedNumber}`; // Contoh: Instagram-Q-001
                     }
-                    
-                    // Tentukan posisi nomor dalam nama file
+
+                    // Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
                     link.download = numberPosition === 'before'
-                        ? `${fileNumber} ${formattedFileName}.vcf`
+                        ? `${formattedNumber} ${formattedFileName}.vcf`
                         : `${formattedFileName}.vcf`;
-                    
+
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                     URL.revokeObjectURL(vcfUrl);
 
                     console.log(`Downloaded file: ${link.download}`);
-                    
-                    fileNumber++;
 
+                    fileNumber++;
                 }
             }
 
@@ -218,8 +239,6 @@
 
     processFiles();
 }
-
-
 
 
 
@@ -269,6 +288,8 @@ function readFileAsync(file) {
         reader.readAsText(file);
     });
 }
+
+
 
         // Fungsi untuk mengonversi VCF ke TXT
         let uploadedFiles = []; // Menyimpan file yang diunggah
@@ -396,7 +417,7 @@ document.getElementById('vcf-files').addEventListener('change', (event) => {
     }
 });
 
-        
+
         // Fungsi untuk memecah file VCF
         function splitVcfFile() {
     const fileInput = document.getElementById('vcf-file');
