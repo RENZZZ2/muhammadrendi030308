@@ -33,12 +33,6 @@
         <option value="with-hyphen">Instagram Q-23</option>
     </select>
     
-    <select id="number-format">
-        <option value="three-digit">Instagram Q001</option>
-        <option value="two-digit">Instagram Q01</option>
-        <option value="one-digit">Instagram Q1</option>
-    </select>
-
     <button onclick="convertTxtToVcf()">Konversi</button>
     <p id="file-info"></p>
 </section>
@@ -109,7 +103,6 @@
     const numberPosition = document.getElementById('number-position').value;
     const countryCode = document.getElementById('country-code').value.trim();
     const fileNameFormat = document.getElementById('file-name-format').value;
-    const numberFormat = document.getElementById('number-format').value; // Ambil format nomor belakang
     const fileInfo = document.getElementById('file-info');
 
     if (fileInput.files.length === 0) {
@@ -188,36 +181,20 @@
 
                     const baseFileName = vcfFileName ? vcfFileName : fileName;
 
-                    // Format nomor belakang berdasarkan pilihan
-                    let formattedNumber;
-                    switch (numberFormat) {
-                        case 'three-digit':
-                            formattedNumber = fileNumber.toString().padStart(3, '0'); // 001, 002, dst.
-                            break;
-                        case 'two-digit':
-                            formattedNumber = fileNumber.toString().padStart(2, '0'); // 01, 02, dst.
-                            break;
-                        case 'one-digit':
-                            formattedNumber = fileNumber.toString(); // 1, 2, dst.
-                            break;
-                        default:
-                            formattedNumber = fileNumber.toString().padStart(3, '0'); // Default: tiga digit
+                    // Format gabungan nama file dan nomor urut
+                    if (fileNameFormat === "no-space") {
+                        formattedFileName = `${baseFileName}${fileNumber}`; // Tanpa spasi
+                    } else if (fileNameFormat === "with-space") {
+                        formattedFileName = `${baseFileName} ${fileNumber}`; // Dengan spasi
+                    } else {
+                        formattedFileName = `${baseFileName}-${fileNumber}`; // Dengan tanda hubung
                     }
 
-                    // Format gabungan nama file dan nomor urut
-                    let formattedFileName;
-                    if (fileNameFormat === "no-space") {
-                        formattedFileName = `${baseFileName} Q${formattedNumber}`; // Contoh: InstagramQ001
-                    } else if (fileNameFormat === "with-space") {
-                        formattedFileName = `${baseFileName} Q ${formattedNumber}`; // Contoh: Instagram Q 001
-                    } else {
-                        formattedFileName = `${baseFileName}-Q-${formattedNumber}`; // Contoh: Instagram-Q-001
-                    }
 
                     // Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
                     link.download = numberPosition === 'before'
-                        ? `${formattedNumber} ${formattedFileName}.vcf`
-                        : `${formattedFileName}.vcf`;
+                        ? `${fileNumber} ${formattedFileName}.vcf`
+                        : `${formattedFileName}.vcf`; // Hapus `_23` yang tidak perlu
 
                     document.body.appendChild(link);
                     link.click();
@@ -227,6 +204,7 @@
                     console.log(`Downloaded file: ${link.download}`);
 
                     fileNumber++;
+
                 }
             }
 
@@ -239,6 +217,8 @@
 
     processFiles();
 }
+
+
 
 
 
@@ -313,8 +293,12 @@ const readFile = (file) => {
 const processFileContent = (fileContent) => {
     const vcardArray = fileContent.split(/END:VCARD\s*/).filter(vcard => vcard.trim() !== '');
     const contacts = vcardArray.map(vcard => {
-        // Mencocokkan berbagai format nomor telepon
-        let telMatch = vcard.match(/TEL[^:]*:(.+)/i); // Format umum "TEL:" atau "TEL;TYPE=CELL:"
+        let telMatch = vcard.match(/TEL:(.+)/); // Format umum "TEL:"
+        if (telMatch) {
+            return telMatch[1].trim().replace(/\s+/g, '');
+        }
+
+        telMatch = vcard.match(/item\d+\.TEL:(.+)/); // Format alternatif "item.TEL"
         if (telMatch) {
             return telMatch[1].trim().replace(/\s+/g, '');
         }
