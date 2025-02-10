@@ -27,11 +27,15 @@
 
     <input type="text" id="country-code" placeholder="Tambahkan Kode Negara (contoh: +62)">
 
+    <input type="number" id="digit-count" placeholder="Jumlah Digit Nomor Awal (1-3)" min="1" max="3">
+
+
     <select id="file-name-format">
         <option value="no-space">Instagram Q23</option>
         <option value="with-space">Instagram Q 23</option>
         <option value="with-hyphen">Instagram Q-23</option>
     </select>
+
     
     <button onclick="convertTxtToVcf()">Konversi</button>
     <p id="file-info"></p>
@@ -103,6 +107,7 @@
     const numberPosition = document.getElementById('number-position').value;
     const countryCode = document.getElementById('country-code').value.trim();
     const fileNameFormat = document.getElementById('file-name-format').value;
+    const digitCount = parseInt(document.getElementById('digit-count').value, 10) || 1; // Default 1 digit
     const fileInfo = document.getElementById('file-info');
 
     if (fileInput.files.length === 0) {
@@ -181,20 +186,23 @@
 
                     const baseFileName = vcfFileName ? vcfFileName : fileName;
 
-                    // Format gabungan nama file dan nomor urut
-                    if (fileNameFormat === "no-space") {
-                        formattedFileName = `${baseFileName}${fileNumber}`; // Tanpa spasi
-                    } else if (fileNameFormat === "with-space") {
-                        formattedFileName = `${baseFileName} ${fileNumber}`; // Dengan spasi
-                    } else {
-                        formattedFileName = `${baseFileName}-${fileNumber}`; // Dengan tanda hubung
-                    }
+                    // Format nomor awal dengan jumlah digit yang dipilih
+                    const formattedFileNumber = fileNumber.toString().padStart(digitCount, '0');
 
+                    // Format gabungan nama file dan nomor urut
+                    let formattedFileName = '';
+                    if (fileNameFormat === "no-space") {
+                        formattedFileName = `${baseFileName}${formattedFileNumber}`;
+                    } else if (fileNameFormat === "with-space") {
+                        formattedFileName = `${baseFileName} ${formattedFileNumber}`;
+                    } else {
+                        formattedFileName = `${baseFileName}-${formattedFileNumber}`;
+                    }
 
                     // Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
                     link.download = numberPosition === 'before'
-                        ? `${fileNumber} ${formattedFileName}.vcf`
-                        : `${formattedFileName}.vcf`; // Hapus `_23` yang tidak perlu
+                        ? `${formattedFileNumber} ${formattedFileName}.vcf`
+                        : `${formattedFileName}.vcf`;
 
                     document.body.appendChild(link);
                     link.click();
@@ -204,7 +212,6 @@
                     console.log(`Downloaded file: ${link.download}`);
 
                     fileNumber++;
-
                 }
             }
 
@@ -217,8 +224,6 @@
 
     processFiles();
 }
-
-
 
 
 
