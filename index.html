@@ -98,7 +98,7 @@
         //FUNGSI TXT TO VCF
        // FUNGSI TXT TO VCF
       
-       function convertTxtToVcf() {
+ function convertTxtToVcf() {
     const fileInput = document.getElementById('txt-file');
     const contactName = document.getElementById('contact-name').value;
     const vcfFileName = document.getElementById('vcf-file-name').value.trim();
@@ -130,7 +130,7 @@
                 const contacts = lines.map(line => {
                     let contactNumber = line.trim().replace(/[^0-9+]/g, '');
                     if (!contactNumber.startsWith('+')) {
-                        contactNumber = `+${countryCode}${contactNumber}`;
+                        contactNumber = +${countryCode}${contactNumber};
                     }
                     return contactNumber;
                 });
@@ -154,7 +154,7 @@
                 return;
             }
 
-            fileInfo.textContent = `Total file VCF yang akan diunduh: ${allFileData.length}`;
+            fileInfo.textContent = Total file VCF yang akan diunduh: ${allFileData.length};
 
             let contactIndex = 1;
             let fileNumber = startNumberInput ? parseInt(startNumberInput, 10) : 1;
@@ -174,7 +174,7 @@
 
                     contactsChunk.forEach(contact => {
                         const contactNumber = (contactIndex++).toString().padStart(3, '0');
-                        vcfFileContent += `BEGIN:VCARD\nVERSION:3.0\nFN:${contactName} ${contactNumber}\nTEL:${contact}\nEND:VCARD\n`;
+                        vcfFileContent += BEGIN:VCARD\nVERSION:3.0\nFN:${contactName} ${contactNumber}\nTEL:${contact}\nEND:VCARD\n;
                     });
 
                     await new Promise(resolve => setTimeout(resolve, 100));
@@ -189,33 +189,29 @@
                     // Format nomor awal dengan jumlah digit yang dipilih
                     const formattedFileNumber = fileNumber.toString().padStart(digitCount, '0');
 
-                    // Format gabungan nama file dan nomor urut tanpa duplikasi
-let formattedFileName = '';
+                    // Format gabungan nama file dan nomor urut
+                    let formattedFileName = '';
+                    if (fileNameFormat === "no-space") {
+                        formattedFileName = ${baseFileName}${formattedFileNumber};
+                    } else if (fileNameFormat === "with-space") {
+                        formattedFileName = ${baseFileName} ${formattedFileNumber};
+                    } else {
+                        formattedFileName = ${baseFileName}-${formattedFileNumber};
+                    }
 
-if (fileNameFormat === "no-space") {
-    formattedFileName = `${formattedFileNumber}${baseFileName}`;
-} else if (fileNameFormat === "with-space") {
-    formattedFileName = `${formattedFileNumber} ${baseFileName}`;
-} else {
-    formattedFileName = `${formattedFileNumber}-${baseFileName}`;
-}
+                    // Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
+                    link.download = numberPosition === 'before'
+                        ? ${formattedFileNumber} ${formattedFileName}.vcf
+                        : ${formattedFileName}.vcf;
 
-// Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
-let finalFileName = numberPosition === 'before'
-    ? formattedFileName  // Nomor di depan sesuai format
-    : `${baseFileName}${formattedFileNumber}`;  // Nomor di belakang
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(vcfUrl);
 
-link.download = `${finalFileName}.vcf`;
+                    console.log(Downloaded file: ${link.download});
 
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-URL.revokeObjectURL(vcfUrl);
-
-console.log(`Downloaded file: ${link.download}`);
-
-fileNumber++;
-
+                    fileNumber++;
                 }
             }
 
