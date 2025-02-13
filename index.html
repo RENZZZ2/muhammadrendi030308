@@ -190,31 +190,31 @@
                     const formattedFileNumber = fileNumber.toString().padStart(digitCount, '0');
 
                     // Format gabungan nama file dan nomor urut tanpa duplikasi
-                    let formattedFileName = baseFileName;
+let formattedFileName = '';
 
-                    if (fileNameFormat === "no-space") {
-                        formattedFileName = `${baseFileName}${formattedFileNumber}`;
-                    } else if (fileNameFormat === "with-space") {
-                        formattedFileName = `${baseFileName} ${formattedFileNumber}`;
-                    } else {
-                        formattedFileName = `${baseFileName}-${formattedFileNumber}`;
-                    }
+if (fileNameFormat === "no-space") {
+    formattedFileName = `${formattedFileNumber}${baseFileName}`;
+} else if (fileNameFormat === "with-space") {
+    formattedFileName = `${formattedFileNumber} ${baseFileName}`;
+} else {
+    formattedFileName = `${formattedFileNumber}-${baseFileName}`;
+}
 
-                    // Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
-                    let finalFileName = numberPosition === 'before'
-                        ? `${formattedFileNumber} ${baseFileName}`  // Nomor awal di depan, tidak ada duplikasi
-                        : `${baseFileName}`;  // Nomor sudah ada di belakang sesuai format
+// Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
+let finalFileName = numberPosition === 'before'
+    ? formattedFileName  // Nomor di depan sesuai format
+    : `${baseFileName}${formattedFileNumber}`;  // Nomor di belakang
 
-                    link.download = `${finalFileName}.vcf`;
+link.download = `${finalFileName}.vcf`;
 
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(vcfUrl);
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+URL.revokeObjectURL(vcfUrl);
 
-                    console.log(`Downloaded file: ${link.download}`);
+console.log(`Downloaded file: ${link.download}`);
 
-                    fileNumber++;
+fileNumber++;
 
                 }
             }
