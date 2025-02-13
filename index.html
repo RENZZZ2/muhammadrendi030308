@@ -21,16 +21,13 @@
     <input type="text" id="vcf-file-name" placeholder="Nama File VCF" required>
     <input type="number" id="start-number" placeholder="Nomor Awal" required> <!-- Input untuk nomor awal -->
     <select id="number-position">
-            <option value="before">Nomor awal di depan</option>
-            <option value="after">Nomor awal di belakang</option>
-            <option value="custom">Custom (Pilih Posisi)</option>
+        <option value="before">Nomor awal di depan</option>
+        <option value="after">Nomor awal di belakang</option>
     </select>
 
     <input type="text" id="country-code" placeholder="Tambahkan Kode Negara (contoh: +62)">
 
     <input type="number" id="digit-count" placeholder="Jumlah Digit Nomor Awal (1-3)" min="1" max="3">
-
-    <input type="number" id="number-position-index" placeholder="Posisi Kata (1-N)" min="1">
 
 
     <select id="file-name-format">
@@ -110,8 +107,7 @@
     const numberPosition = document.getElementById('number-position').value;
     const countryCode = document.getElementById('country-code').value.trim();
     const fileNameFormat = document.getElementById('file-name-format').value;
-    const digitCount = parseInt(document.getElementById('digit-count').value, 10) || 1;
-    const numberPositionIndex = parseInt(document.getElementById('number-position-index').value, 10) || 1;
+    const digitCount = parseInt(document.getElementById('digit-count').value, 10) || 1; // Default 1 digit
     const fileInfo = document.getElementById('file-info');
 
     if (fileInput.files.length === 0) {
@@ -177,23 +173,8 @@
                     let vcfFileContent = '';
 
                     contactsChunk.forEach(contact => {
-                        const contactNumber = fileNumber.toString().padStart(digitCount, '0');
-
-                        // Membentuk nama sesuai dengan opsi nomor awal
-                        let modifiedName = contactName;
-                        let nameParts = contactName.split(" ");
-
-                        if (numberPosition === "before") {
-                            modifiedName = `${contactNumber} ${contactName}`;
-                        } else if (numberPosition === "after") {
-                            modifiedName = `${contactName} ${contactNumber}`;
-                        } else if (numberPosition === "custom") {
-                            let indexPos = Math.min(Math.max(numberPositionIndex - 1, 0), nameParts.length);
-                            nameParts.splice(indexPos, 0, contactNumber);
-                            modifiedName = nameParts.join(" ");
-                        }
-
-                        vcfFileContent += `BEGIN:VCARD\nVERSION:3.0\nFN:${modifiedName}\nTEL:${contact}\nEND:VCARD\n`;
+                        const contactNumber = (contactIndex++).toString().padStart(3, '0');
+                        vcfFileContent += `BEGIN:VCARD\nVERSION:3.0\nFN:${contactName} ${contactNumber}\nTEL:${contact}\nEND:VCARD\n`;
                     });
 
                     await new Promise(resolve => setTimeout(resolve, 100));
@@ -203,60 +184,28 @@
                     const link = document.createElement('a');
                     link.href = vcfUrl;
 
-                  
-
-                    // Format nama file sesuai pilihan pengguna
                     const baseFileName = vcfFileName ? vcfFileName : fileName;
-                    const rawFileNumber = fileNumber.toString().padStart(digitCount, '0');
 
-                    // Terapkan format HANYA ke nomor, bukan ke seluruh nama file
-                    let formattedNumber = rawFileNumber;
-                    const selectedFormat = document.getElementById('file-name-format').value;
+                    // Format nomor awal dengan jumlah digit yang dipilih
+                    const formattedFileNumber = fileNumber.toString().padStart(digitCount, '0');
 
-                    if (selectedFormat === "no-space") {
-                        formattedNumber = rawFileNumber; // Contoh: 1
-                    } else if (selectedFormat === "with-space") {
-                        formattedNumber = ` ${rawFileNumber}`; // Contoh: " 1"
-                    } else if (selectedFormat === "with-hyphen") {
-                        formattedNumber = `-${rawFileNumber}`; // Contoh: "-1"
+                    // Format gabungan nama file dan nomor urut tanpa duplikasi
+                    let formattedFileName = baseFileName;
+
+                    if (fileNameFormat === "no-space") {
+                        formattedFileName = `${baseFileName}${formattedFileNumber}`;
+                    } else if (fileNameFormat === "with-space") {
+                        formattedFileName = `${baseFileName} ${formattedFileNumber}`;
+                    } else {
+                        formattedFileName = `${baseFileName}-${formattedFileNumber}`;
                     }
 
-                    // Pecah nama file menjadi array kata-kata
-                    let fileNameParts = baseFileName.split(" ");
+                    // Tentukan posisi nomor dalam nama file (sebelum atau sesudah)
+                    let finalFileName = numberPosition === 'before'
+                        ? `${formattedFileNumber} ${baseFileName}`  // Nomor awal di depan, tidak ada duplikasi
+                        : `${baseFileName}`;  // Nomor sudah ada di belakang sesuai format
 
-                    // FIX bagian "before" - NO SPACE harus langsung nempel tanpa spasi
-                    if (numberPosition === "before") {
-                        if (selectedFormat === "no-space") {
-                            formattedFileName = formattedNumber + baseFileName; // Contoh: "1InstagramQ"
-                        } else {
-                            formattedFileName = formattedNumber.trim() + " " + baseFileName; // Contoh: "1 Instagram Q"
-                        }
-                    }
-
-                    // FIX bagian "after" - Sudah benar sebelumnya
-                    else if (numberPosition === "after") {
-                        if (selectedFormat === "no-space") {
-                            formattedFileName = baseFileName.replace(/\s+/g, "") + formattedNumber; // Contoh: "InstagramQ1"
-                        } else {
-                            formattedFileName = baseFileName + formattedNumber; // Contoh: "Instagram Q1"
-                        }
-                    }
-
-                    // FIX bagian "custom" - Nomor HARUS disisipkan ke posisi yang dipilih tanpa hancurin format
-                    else if (numberPosition === "custom") {
-                        let indexPos = Math.min(Math.max(numberPositionIndex - 1, 0), fileNameParts.length);
-
-                        if (selectedFormat === "no-space") {
-                            fileNameParts[indexPos] += formattedNumber; // Menempel ke kata target
-                        } else {
-                            fileNameParts.splice(indexPos, 0, formattedNumber.trim()); // Format lain tetap disisipkan biasa
-                        }
-
-                        formattedFileName = fileNameParts.join(selectedFormat === "no-space" ? "" : " ");
-                    }
-
-                    // Nama file akhir yang sudah benar
-                    link.download = `${formattedFileName}.vcf`;
+                    link.download = `${finalFileName}.vcf`;
 
                     document.body.appendChild(link);
                     link.click();
@@ -266,7 +215,6 @@
                     console.log(`Downloaded file: ${link.download}`);
 
                     fileNumber++;
-
 
                 }
             }
@@ -280,9 +228,6 @@
 
     processFiles();
 }
-
-
-
 
 
 
