@@ -151,22 +151,23 @@ function convertTxtToVcf() {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = function (event) {
-               const contacts = lines.map(line => {
-                    let contactNumber = line.trim().replace(/[^0-9+]/g, ''); // Hanya angka dan '+'
-                
+                const lines = event.target.result.split('\n').map(line => line.trim()).filter(line => line !== '');
+
+                const contacts = lines.map(line => {
+                    let contactNumber = line.replace(/[^0-9+]/g, ''); // Hanya angka dan '+'
+
                     if (!contactNumber.startsWith('+')) {
-                        const cleanCountryCode = countryCode.replace(/\D/g, ''); // Hapus karakter non-angka di kode negara
+                        const cleanCountryCode = countryCode.replace(/\D/g, ''); // Hapus karakter non-angka dari kode negara
                         contactNumber = `+${cleanCountryCode}${contactNumber}`;
                     }
-                
+
                     return contactNumber;
                 });
-
 
                 resolve({ contacts, fileName: file.name.replace('.txt', '') });
             };
             reader.onerror = function (error) {
-                reject('Terjadi kesalahan saat membaca file:', error);
+                reject(`Terjadi kesalahan saat membaca file: ${error}`);
             };
             reader.readAsText(file);
         });
@@ -246,7 +247,6 @@ function convertTxtToVcf() {
 
     processFiles();
 }
-
 
 
 
