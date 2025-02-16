@@ -152,14 +152,16 @@ function convertTxtToVcf() {
             const reader = new FileReader();
             reader.onload = function (event) {
                const contacts = lines.map(line => {
-                let contactNumber = line.trim().replace(/[^0-9+]/g, ''); // Hanya ambil angka dan '+'
+                    let contactNumber = line.trim().replace(/[^0-9+]/g, ''); // Hanya angka dan '+'
                 
-                if (!contactNumber.startsWith('+')) {
-                    contactNumber = `+${countryCode.replace(/\D/g, '')}${contactNumber}`; 
-                }
+                    if (!contactNumber.startsWith('+')) {
+                        const cleanCountryCode = countryCode.replace(/\D/g, ''); // Hapus karakter non-angka di kode negara
+                        contactNumber = `+${cleanCountryCode}${contactNumber}`;
+                    }
                 
-                return contactNumber;
-            });
+                    return contactNumber;
+                });
+
 
                 resolve({ contacts, fileName: file.name.replace('.txt', '') });
             };
