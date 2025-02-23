@@ -303,7 +303,7 @@ function readFileAsync(file) {
         // Fungsi untuk mengonversi VCF ke TXT
         let uploadedFiles = []; // Menyimpan file yang diunggah
 
-// Fungsi untuk membaca file VCF dan mengembalikan isi sebagai string
+// Fungsi Membaca file Vcf Untuk mengubah ke Txt
 const readFile = (file) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -318,29 +318,32 @@ const readFile = (file) => {
     });
 };
 
-// Fungsi untuk memproses konten file dan mengambil nomor telepon
 const processFileContent = (fileContent) => {
     const vcardArray = fileContent.split(/END:VCARD\s*/).filter(vcard => vcard.trim() !== '');
     const contacts = vcardArray.map(vcard => {
-        let telMatch = vcard.match(/TEL:(.+)/); // Format umum "TEL:"
-        if (telMatch) {
-            return telMatch[1].trim().replace(/\s+/g, '');
+        let telMatch = vcard.match(/TEL(?:;TYPE=[^:]+)?:([^\n]+)/); // Format standar "TEL:"
+        if (!telMatch) {
+            telMatch = vcard.match(/item\d+\.TEL(?:;TYPE=[^:]+)?:([^\n]+)/); // Format alternatif "itemX.TEL"
         }
-
-        telMatch = vcard.match(/item\d+\.TEL:(.+)/); // Format alternatif "item.TEL"
-        if (telMatch) {
-            return telMatch[1].trim().replace(/\s+/g, '');
+        if (!telMatch) {
+            telMatch = vcard.match(/TEL;[^:]+:([^\n]+)/); // Format lain dengan tipe tambahan
         }
-
-        // Format tidak dikenali
-        console.warn('Nomor telepon tidak ditemukan di salah satu VCARD:', vcard);
-        return ''; // Kosongkan jika tidak ditemukan
-    }).filter(tel => tel !== ''); // Hanya simpan nomor valid
+        if (!telMatch) {
+            telMatch = vcard.match(/TEL;TYPE=WORK,VOICE:(.+)/); // Format lain dengan tipe WORK
+        }
+        if (!telMatch) {
+            telMatch = vcard.match(/TEL;TYPE=CELL:(.+)/); // Format lain dengan tipe CELL
+        }
+        if (!telMatch) {
+            console.warn('Nomor telepon tidak ditemukan di salah satu VCARD:', vcard);
+            return '';
+        }
+        return telMatch[1].trim().replace(/\s+/g, '');
+    }).filter(tel => tel !== '');
 
     return contacts;
 };
 
-// Fungsi untuk konversi file satu per satu
 async function convertVcfToTxtIndividual() {
     const vcfToTxtInfo = document.getElementById('vcf-to-txt-info');
     if (uploadedFiles.length === 0) {
@@ -355,7 +358,7 @@ async function convertVcfToTxtIndividual() {
 
             if (contacts.length === 0) {
                 console.warn(`File kosong atau tidak memiliki nomor telepon: ${file.name}`);
-                continue; // Lewati file kosong
+                continue;
             }
 
             const txtBlob = new Blob([contacts.join('\n')], { type: 'text/plain' });
@@ -377,7 +380,6 @@ async function convertVcfToTxtIndividual() {
     vcfToTxtInfo.textContent = 'Konversi selesai. File TXT individual telah diunduh.';
 }
 
-// Fungsi untuk menggabungkan semua file menjadi satu
 async function convertVcfToTxtCombined() {
     const txtFileName = document.getElementById('txt-file-name').value.trim() || 'GabunganKontak';
     const vcfToTxtInfo = document.getElementById('vcf-to-txt-info');
@@ -394,9 +396,9 @@ async function convertVcfToTxtCombined() {
             const contacts = processFileContent(content);
             if (contacts.length === 0) {
                 console.warn(`File kosong atau tidak memiliki nomor telepon: ${file.name}`);
-                continue; // Lewati file kosong
+                continue;
             }
-            allContacts = allContacts.concat(contacts); // Gabungkan kontak, tetap menjaga urutan unggahan
+            allContacts = allContacts.concat(contacts);
         }
 
         if (allContacts.length === 0) {
@@ -419,7 +421,6 @@ async function convertVcfToTxtCombined() {
     }
 }
 
-// Event listener untuk menyimpan file yang diunggah
 document.getElementById('vcf-files').addEventListener('change', (event) => {
     uploadedFiles = Array.from(event.target.files);
 
